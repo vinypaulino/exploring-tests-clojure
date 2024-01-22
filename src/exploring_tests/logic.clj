@@ -23,3 +23,8 @@
       department
       count
       (< 5)))
+
+(defn arrived-at
+  [hospital department patient]
+  (update hospital department conj patient)
+  )
