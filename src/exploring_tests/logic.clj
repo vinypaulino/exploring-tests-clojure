@@ -38,7 +38,6 @@
     {:hospital hospital, :result :impossible-to-add-patient-to-the-queue })
   )
 
-
 ;(defn arrived-at
 ;  [hospital department patient]
 ;  (if (fits-in-queue? hospital department)
@@ -46,3 +45,30 @@
 ;    (throw (ex-info "This department is full or doesn't exits"
 ;                    {:patient patient, :type :impossible-to-add-patient-to-the-queue}))))
 
+(defn arrived-at
+  [hospital department patient]
+  (if (fits-in-queue? hospital department)
+    (update hospital department conj patient)
+    (throw (ex-info "This department is full or doesn't exits" {:patient patient}))))
+
+(defn was-attended-to
+  [hospital department]
+  (update hospital department pop))
+
+(defn next-patient
+  [hospital department]
+  (-> hospital
+      department
+      peek)
+  )
+
+(defn transfer
+  [hospital from to]
+
+  (let [patient (next-patient hospital from)]
+    (-> hospital
+        (was-attended-to from)
+        (arrived-at to patient)
+        )
+    )
+  )
